@@ -305,7 +305,6 @@ function getCardId(value) {
   const suitId = suits.indexOf(curSuit) * 13;
   const rateId = rates.indexOf(curRate);
 
-  console.log(suitId, rateId);
   return suitId + rateId;
 }
 
