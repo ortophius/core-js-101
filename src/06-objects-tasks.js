@@ -123,6 +123,15 @@ function fromJSON(proto, json) {
  *  For more examples see unit tests.
  */
 
+// const StringSelector = function (selector) {
+//   this.element = '';
+//   this.id = '';
+//   this.pseudoEl = '';
+//   this.pseudoClasses = [];
+//   this.classes = [];
+//   this.attrs = [];
+// };
+
 const cssSelectorBuilder = {
   element(/* value */) {
     throw new Error('Not implemented');
@@ -152,7 +161,6 @@ const cssSelectorBuilder = {
     throw new Error('Not implemented');
   },
 };
-
 
 module.exports = {
   Rectangle,

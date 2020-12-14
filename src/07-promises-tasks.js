@@ -28,8 +28,13 @@
  *      .catch((error) => console.log(error.message)) // 'Error: Wrong parameter is passed!
  *                                                    //  Ask her again.';
  */
-function willYouMarryMe(/* isPositiveAnswer */) {
-  throw new Error('Not implemented');
+function willYouMarryMe(isPositiveAnswer) {
+  return new Promise((resolve, reject) => {
+    if (typeof isPositiveAnswer === 'boolean') {
+      const str = (isPositiveAnswer) ? 'Hooray!!! She said "Yes"!' : 'Oh no, she said "No".';
+      resolve(str);
+    } else reject(new Error('Wrong parameter is passed! Ask her again.'));
+  });
 }
 
 
@@ -48,8 +53,8 @@ function willYouMarryMe(/* isPositiveAnswer */) {
  *    })
  *
  */
-function processAllPromises(/* array */) {
-  throw new Error('Not implemented');
+function processAllPromises(array) {
+  return Promise.all(array);
 }
 
 /**
@@ -71,8 +76,12 @@ function processAllPromises(/* array */) {
  *    })
  *
  */
-function getFastestPromise(/* array */) {
-  throw new Error('Not implemented');
+function getFastestPromise(array) {
+  return new Promise((res, rej) => {
+    Promise.race(array)
+      .catch((data) => { rej(data); })
+      .then((data) => { res(data); });
+  });
 }
 
 /**
@@ -92,8 +101,35 @@ function getFastestPromise(/* array */) {
  *    });
  *
  */
-function chainPromises(/* array, action */) {
-  throw new Error('Not implemented');
+function chainPromises(array, action) {
+  let completedPromisesCount = 0;
+  const resolved = [];
+
+  const temp = new Promise((resolve) => {
+    function checkIfAllPromisesDone() {
+      completedPromisesCount += 1;
+      if (completedPromisesCount === array.length) resolve(resolved);
+    }
+
+    array.forEach((promise) => {
+      promise
+        .then((data) => {
+          resolved.push(data);
+          checkIfAllPromisesDone();
+        })
+        .catch(() => {
+          checkIfAllPromisesDone();
+        });
+    });
+  });
+
+  function getResult(arr) {
+    return arr.reduce((total, current) => action(total, current));
+  }
+
+  return new Promise((resolve) => {
+    temp.then((data) => { resolve(getResult(data)); });
+  });
 }
 
 module.exports = {
